@@ -1,0 +1,9 @@
+---
+- name: Update and upgrade CentOS
+  yum:
+    name: '*'
+    state: latest
+
+- name: Reboot the system if required
+  command: shutdown -r now
+  when: yum_update.changed | default(false)

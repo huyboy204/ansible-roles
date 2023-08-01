@@ -1,0 +1,8 @@
+---
+- name: Install Gitlab
+  hosts: centos-gitlab
+  become: yes
+
+  roles:
+    - name: Install Gitlab
+      role: gitlab

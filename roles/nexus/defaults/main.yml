@@ -1,0 +1,3 @@
+---
+nexus_user: nexus
+url_nexus3_oss: https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/3/nexus-3.58.1-01-unix.tar.gz

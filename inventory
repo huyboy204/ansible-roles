@@ -1,0 +1,15 @@
+ubuntu ansible_host=192.168.56.103 ansible_ssh_pass=20042001Huy@
+centos ansible_host=192.168.56.101 ansible_ssh_pass=20042001Huy@
+ubuntu-test ansible_host=192.168.56.104 ansible_ssh_pass=20042001Huy@
+ubuntu-gitlab ansible_host=192.168.56.105 ansible_ssh_pass=20042001Huy@
+ubuntu-sonarqube ansible_host=192.168.56.106 ansible_ssh_pass=20042001Huy@
+ubuntu-jenkins ansible_host=192.168.56.107 ansible_ssh_pass=20042001Huy@
+ubuntu-nexus ansible_host=192.168.56.108 ansible_ssh_pass=20042001Huy@
+centos-gitlab ansible_host=192.168.56.110 ansible_ssh_pass=20042001Huy@
+centos-jenkins ansible_host=192.168.56.111 ansible_ssh_pass=20042001Huy@
+centos-sonar ansible_host=192.168.56.112 ansible_ssh_pass=20042001Huy@
+centos-nexus ansible_host=192.168.56.113 ansible_ssh_pass=20042001Huy@
+
+[hosts]
+ubuntu
+centos

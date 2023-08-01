@@ -1,0 +1,11 @@
+---
+- name: Install SonarQube
+  hosts: centos-sonar
+  become: yes
+
+  roles:
+    - name: Install Java
+      role: java
+
+    - name: Install SonarQube
+      role: sonarqube

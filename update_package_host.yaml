@@ -1,0 +1,13 @@
+---
+- name: Update and Upgrade Ubuntu and CentOS systems
+  hosts: hosts
+  become: yes
+
+  roles:
+    - name: Ubuntu Update
+      role: ubuntu_update
+      when: ansible_os_family == 'Debian'
+
+    - name: CentOS Update
+      role: centos_update
+      when: ansible_os_family == 'RedHat'

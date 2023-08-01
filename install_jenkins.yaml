@@ -1,0 +1,11 @@
+---
+- name: Install Jenkins
+  hosts: centos-jenkins
+  become: yes
+
+  roles:
+    - name: Install Java
+      role: java
+
+    - name: Install Jenkins
+      role: jenkins

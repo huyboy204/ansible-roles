@@ -1,0 +1,17 @@
+---
+- name: Install Nexus OSS
+  hosts: centos-nexus
+  become: yes
+  
+  tasks:
+    - name: Load variable file for Debian family
+      include_vars: vars_debianJava_forNexus.yml
+      when: ansible_os_family == "Debian"
+
+    - name: Include role to install Java
+      include_role:
+        name: java
+
+    - name: Include role to install Nexus
+      include_role:
+        name: nexus

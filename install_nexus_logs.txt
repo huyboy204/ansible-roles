@@ -1,0 +1,81 @@
+
+PLAY [Install Nexus OSS] ***************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [java : Include OS-specific variables for Fedora or FreeBSD.] *********************************************************************************************************************************
+skipping: [ubuntu-nexus]
+
+TASK [java : Include version-specific variables for CentOS/RHEL.] **********************************************************************************************************************************
+skipping: [ubuntu-nexus]
+
+TASK [java : Include version-specific variables for Ubuntu.] ***************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [java : Include version-specific variables for Debian.] ***************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [Define java_packages.] ***********************************************************************************************************************************************************************
+skipping: [ubuntu-nexus]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+skipping: [ubuntu-nexus]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+included: /root/ansible/roles/java/tasks/setup-Debian.yml for ubuntu-nexus
+
+TASK [java : Ensure 'man' directory exists.] *******************************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [java : Ensure Java is installed.] ************************************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+skipping: [ubuntu-nexus]
+
+TASK [java : Set JAVA_HOME if configured.] *********************************************************************************************************************************************************
+skipping: [ubuntu-nexus]
+
+TASK [nexus : Create Nexus user] *******************************************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [nexus : Allow Nexus user to use sudo without password prompt] ********************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [nexus : Download Nexus OSS package] **********************************************************************************************************************************************************
+changed: [ubuntu-nexus]
+
+TASK [nexus : Extract Nexus OSS package] ***********************************************************************************************************************************************************
+changed: [ubuntu-nexus]
+
+TASK [Rename Nexus directory to 'nexus'] ***********************************************************************************************************************************************************
+changed: [ubuntu-nexus]
+
+TASK [nexus : Set correct ownership for Nexus directory] *******************************************************************************************************************************************
+changed: [ubuntu-nexus]
+
+TASK [Edit nexus.vmoptions with custom settings] ***************************************************************************************************************************************************
+changed: [ubuntu-nexus] => (item={u'regexp': u'^-XX:LogFile=.*', u'line': u'-XX:LogFile=./sonatype-work/nexus3/log/jvm.log'})
+ok: [ubuntu-nexus] => (item={u'regexp': u'^-XX:-OmitStackTraceInFastThrow.*', u'line': u'-XX:-OmitStackTraceInFastThrow'})
+ok: [ubuntu-nexus] => (item={u'regexp': u'^-Djava.net.preferIPv4Stack=.*', u'line': u'-Djava.net.preferIPv4Stack=true'})
+ok: [ubuntu-nexus] => (item={u'regexp': u'^-Dkaraf.home=.*', u'line': u'-Dkaraf.home=.'})
+ok: [ubuntu-nexus] => (item={u'regexp': u'^-Dkaraf.base=.*', u'line': u'-Dkaraf.base=.'})
+ok: [ubuntu-nexus] => (item={u'regexp': u'^-Dkaraf.etc=.*', u'line': u'-Dkaraf.etc=etc/karaf'})
+ok: [ubuntu-nexus] => (item={u'regexp': u'^-Djava.util.logging.config.file=.*', u'line': u'-Djava.util.logging.config.file=etc/karaf/java.util.logging.properties'})
+changed: [ubuntu-nexus] => (item={u'regexp': u'^-Dkaraf.data=.*', u'line': u'-Dkaraf.data=./sonatype-work/nexus3'})
+changed: [ubuntu-nexus] => (item={u'regexp': u'^-Dkaraf.log=.*', u'line': u'-Dkaraf.log=./sonatype-work/nexus3/log'})
+changed: [ubuntu-nexus] => (item={u'regexp': u'^-Djava.io.tmpdir=.*', u'line': u'-Djava.io.tmpdir=./sonatype-work/nexus3/tmp'})
+
+TASK [nexus : Configure Nexus as a service] ********************************************************************************************************************************************************
+changed: [ubuntu-nexus]
+
+TASK [nexus : Reload systemd] **********************************************************************************************************************************************************************
+ok: [ubuntu-nexus]
+
+TASK [nexus : Start Nexus Service] *****************************************************************************************************************************************************************
+changed: [ubuntu-nexus]
+
+PLAY RECAP *****************************************************************************************************************************************************************************************
+ubuntu-nexus               : ok=16   changed=7    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+

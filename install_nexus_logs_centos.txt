@@ -1,0 +1,123 @@
+
+PLAY [Install Nexus OSS] ***************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************************************************************************************************
+ok: [centos-nexus]
+
+TASK [Load variable file for Debian family] ********************************************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [Include role to install Java] ****************************************************************************************************************************************************************
+
+TASK [java : Include OS-specific variables for Fedora or FreeBSD.] *********************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [java : Include version-specific variables for CentOS/RHEL.] **********************************************************************************************************************************
+ok: [centos-nexus]
+
+TASK [java : Include version-specific variables for Ubuntu.] ***************************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [java : Include version-specific variables for Debian.] ***************************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [Define java_packages.] ***********************************************************************************************************************************************************************
+ok: [centos-nexus]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+included: /root/ansible/roles/java/tasks/setup-RedHat.yml for centos-nexus
+
+TASK [java : Ensure Java is installed.] ************************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [java : Set JAVA_HOME if configured.] *********************************************************************************************************************************************************
+skipping: [centos-nexus]
+
+TASK [Include role to install Nexus] ***************************************************************************************************************************************************************
+
+TASK [nexus : Create Nexus user] *******************************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Allow Nexus user to use sudo without password prompt] ********************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [Create /data/nexus-data directory] ***********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Download Nexus OSS package] **********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Extract Nexus OSS package] ***********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [Rename Nexus directory to 'nexus'] ***********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Set correct ownership for Nexus directory] *******************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Set correct ownership for Nexus directory] *******************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Add JAVA_HOME to /etc/bashrc] ********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Add NEXUS_HOME to /etc/bashrc] *******************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Get updated JAVA_HOME and NEXUS_HOME into current shell] *****************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [Edit nexus.vmoptions with custom settings for Debian] ****************************************************************************************************************************************
+skipping: [centos-nexus] => (item={u'regexp': u'^-XX:LogFile=.*', u'line': u'-XX:LogFile=./sonatype-work/nexus3/log/jvm.log'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-XX:-OmitStackTraceInFastThrow.*', u'line': u'-XX:-OmitStackTraceInFastThrow'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Djava.net.preferIPv4Stack=.*', u'line': u'-Djava.net.preferIPv4Stack=true'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.home=.*', u'line': u'-Dkaraf.home=.'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.base=.*', u'line': u'-Dkaraf.base=.'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.etc=.*', u'line': u'-Dkaraf.etc=etc/karaf'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Djava.util.logging.config.file=.*', u'line': u'-Djava.util.logging.config.file=etc/karaf/java.util.logging.properties'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.data=.*', u'line': u'-Dkaraf.data=./sonatype-work/nexus3'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.log=.*', u'line': u'-Dkaraf.log=./sonatype-work/nexus3/log'}) 
+skipping: [centos-nexus] => (item={u'regexp': u'^-Djava.io.tmpdir=.*', u'line': u'-Djava.io.tmpdir=./sonatype-work/nexus3/tmp'}) 
+
+TASK [Edit nexus.vmoptions with custom settings for RedHat] ****************************************************************************************************************************************
+ok: [centos-nexus] => (item={u'regexp': u'^-XX:\\+UnlockDiagnosticVMOptions.*', u'line': u'-XX:+UnlockDiagnosticVMOptions'})
+changed: [centos-nexus] => (item={u'regexp': u'^-XX:\\+UnsyncloadClass.*', u'line': u'-XX:+UnsyncloadClass'})
+ok: [centos-nexus] => (item={u'regexp': u'^-XX:\\+LogVMOutput.*', u'line': u'-XX:+LogVMOutput'})
+changed: [centos-nexus] => (item={u'regexp': u'^-XX:LogFile=.*', u'line': u'-XX:LogFile=/data/nexus-data/nexus3/log/jvm.log'})
+ok: [centos-nexus] => (item={u'regexp': u'^-Djava.net.preferIPv4Stack=.*', u'line': u'-Djava.net.preferIPv4Stack=true'})
+ok: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.home=.*', u'line': u'-Dkaraf.home=.'})
+ok: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.base=.*', u'line': u'-Dkaraf.base=.'})
+ok: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.etc=.*', u'line': u'-Dkaraf.etc=etc/karaf'})
+ok: [centos-nexus] => (item={u'regexp': u'^-Djava.util.logging.config.file=.*', u'line': u'-Djava.util.logging.config.file=etc/karaf/java.util.logging.properties'})
+changed: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.data=.*', u'line': u'-Dkaraf.data=/data/nexus-data/nexus3'})
+changed: [centos-nexus] => (item={u'regexp': u'^-Djava.io.tmpdir=.*', u'line': u'-Djava.io.tmpdir=/data/nexus-data/nexus3/tmp'})
+ok: [centos-nexus] => (item={u'regexp': u'^-Dkaraf.startLocalConsole=.*', u'line': u'-Dkaraf.startLocalConsole=false'})
+
+TASK [nexus : Ensure the Nexus service account is configured] **************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Configure Nexus as a service] ********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Reload systemd] **********************************************************************************************************************************************************************
+ok: [centos-nexus]
+
+TASK [nexus : Start Nexus Service] *****************************************************************************************************************************************************************
+changed: [centos-nexus]
+
+TASK [nexus : Open ports 8081 on CentOS] ***********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+RUNNING HANDLER [nexus : Restart firewalld] ********************************************************************************************************************************************************
+changed: [centos-nexus]
+
+PLAY RECAP *****************************************************************************************************************************************************************************************
+centos-nexus               : ok=23   changed=18   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0   
+

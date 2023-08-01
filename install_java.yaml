@@ -1,0 +1,8 @@
+---
+- name: Install Java
+  hosts: ubuntu-jenkins
+  become: yes
+
+  roles:
+    - name: Install Java
+      role: java

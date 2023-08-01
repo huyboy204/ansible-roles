@@ -1,0 +1,148 @@
+---
+- name: Create Nexus user
+  ansible.builtin.user:
+    name: "{{ nexus_user }}"
+    state: present
+    createhome: no
+
+# Add the Nexus user to the sudoers file
+- name: Allow Nexus user to use sudo without password prompt
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    line: "{{ nexus_user }} ALL=(ALL) NOPASSWD:ALL"
+    validate: 'visudo -cf %s'
+
+- name: Create /data/nexus-data directory
+  file:
+    path: /data/nexus-data
+    state: directory
+    mode: "0755"
+  when: ansible_os_family == "RedHat"
+
+- name: Download Nexus OSS package
+  ansible.builtin.get_url:
+    url: "{{ url_nexus3_oss }}"
+    dest: /tmp/nexus.tar.gz
+    mode: '0644'
+
+- name: Extract Nexus OSS package
+  ansible.builtin.unarchive:
+    src: /tmp/nexus.tar.gz
+    dest: /opt/
+    remote_src: yes
+    creates: /opt/nexus-3.58.1-01/bin/nexus
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_user }}"
+    mode: "0755"
+
+- name: Rename Nexus directory to 'nexus'
+  ansible.builtin.file:
+    src: /opt/nexus-3.58.1-01
+    dest: /opt/nexus
+    state: link
+
+- name: Set correct ownership for Nexus directory
+  ansible.builtin.file:
+    path: "/opt/nexus"
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_user }}"
+    recurse: yes
+    state: directory
+
+- name: Set correct ownership for Nexus directory
+  ansible.builtin.file:
+    path: "/data/nexus-data"
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_user }}"
+    recurse: yes
+    state: directory
+  when: ansible_os_family == "RedHat"
+
+- name: Add JAVA_HOME to /etc/bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: 'export JAVA_HOME=$(dirname $(dirname $(readlink $(readlink $(which javac)))))'
+  when: ansible_os_family == "RedHat"
+      # The above task adds the line to set JAVA_HOME to /etc/bashrc
+
+- name: Add NEXUS_HOME to /etc/bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: 'export NEXUS_HOME=/opt/nexus'
+  when: ansible_os_family == "RedHat"
+      # The above task adds the line to set NEXUS_HOME to /etc/bashrc
+
+- name: Get updated JAVA_HOME and NEXUS_HOME into current shell
+  shell: source /etc/bashrc
+  when: ansible_os_family == "RedHat"
+
+- name: Edit nexus.vmoptions with custom settings for Debian
+  ansible.builtin.lineinfile:
+    path: /opt/nexus/bin/nexus.vmoptions
+    regexp: '^{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: '^-XX:LogFile=.*', line: '-XX:LogFile=./sonatype-work/nexus3/log/jvm.log' }
+    - { regexp: '^-XX:-OmitStackTraceInFastThrow.*', line: '-XX:-OmitStackTraceInFastThrow' }
+    - { regexp: '^-Djava.net.preferIPv4Stack=.*', line: '-Djava.net.preferIPv4Stack=true' }
+    - { regexp: '^-Dkaraf.home=.*', line: '-Dkaraf.home=.' }
+    - { regexp: '^-Dkaraf.base=.*', line: '-Dkaraf.base=.' }
+    - { regexp: '^-Dkaraf.etc=.*', line: '-Dkaraf.etc=etc/karaf' }
+    - { regexp: '^-Djava.util.logging.config.file=.*', line: '-Djava.util.logging.config.file=etc/karaf/java.util.logging.properties' }
+    - { regexp: '^-Dkaraf.data=.*', line: '-Dkaraf.data=./sonatype-work/nexus3' }
+    - { regexp: '^-Dkaraf.log=.*', line: '-Dkaraf.log=./sonatype-work/nexus3/log' }
+    - { regexp: '^-Djava.io.tmpdir=.*', line: '-Djava.io.tmpdir=./sonatype-work/nexus3/tmp' }
+  when: ansible_os_family == "Debian"
+
+- name: Edit nexus.vmoptions with custom settings for RedHat
+  ansible.builtin.lineinfile:
+    path: /opt/nexus/bin/nexus.vmoptions
+    regexp: '^{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: '^-XX:\+UnlockDiagnosticVMOptions.*', line: '-XX:+UnlockDiagnosticVMOptions' }
+    - { regexp: '^-XX:\+UnsyncloadClass.*', line: '-XX:+UnsyncloadClass' }
+    - { regexp: '^-XX:\+LogVMOutput.*', line: '-XX:+LogVMOutput' }
+    - { regexp: '^-XX:LogFile=.*', line: '-XX:LogFile=/data/nexus-data/nexus3/log/jvm.log' }
+    - { regexp: '^-Djava.net.preferIPv4Stack=.*', line: '-Djava.net.preferIPv4Stack=true' }
+    - { regexp: '^-Dkaraf.home=.*', line: '-Dkaraf.home=.' }
+    - { regexp: '^-Dkaraf.base=.*', line: '-Dkaraf.base=.' }
+    - { regexp: '^-Dkaraf.etc=.*', line: '-Dkaraf.etc=etc/karaf' }
+    - { regexp: '^-Djava.util.logging.config.file=.*', line: '-Djava.util.logging.config.file=etc/karaf/java.util.logging.properties' }
+    - { regexp: '^-Dkaraf.data=.*', line: '-Dkaraf.data=/data/nexus-data/nexus3' }
+    - { regexp: '^-Djava.io.tmpdir=.*', line: '-Djava.io.tmpdir=/data/nexus-data/nexus3/tmp' }
+    - { regexp: '^-Dkaraf.startLocalConsole=.*', line: '-Dkaraf.startLocalConsole=false' }
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure the Nexus service account is configured
+  lineinfile:
+    path: /opt/nexus/bin/nexus.rc  # Path to the file to modify
+    regexp: '^run_as_user='  # Regular expression to identify the line to change
+    line: 'run_as_user="nexus"'
+
+- name: Configure Nexus as a service
+  ansible.builtin.template:
+    src: nexus.service.j2
+    dest: /etc/systemd/system/nexus.service
+  
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  notify:
+    - Start Nexus Service
+
+- name: Start Nexus Service
+  ansible.builtin.service:
+    name: nexus
+    state: started
+    enabled: yes
+
+- name: Open ports 8081 on CentOS
+  firewalld:
+    port: 8081/tcp
+    zone: public
+    permanent: yes
+    state: enabled
+  when: ansible_os_family == 'RedHat'
+  notify: Restart firewalld

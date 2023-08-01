@@ -1,0 +1,136 @@
+
+PLAY [Install SonarQube] ***************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [java : Include OS-specific variables for Fedora or FreeBSD.] *********************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [java : Include version-specific variables for CentOS/RHEL.] **********************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [java : Include version-specific variables for Ubuntu.] ***************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [java : Include version-specific variables for Debian.] ***************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [Define java_packages.] ***********************************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+included: /root/ansible/roles/java/tasks/setup-Debian.yml for ubuntu-sonarqube
+
+TASK [java : Ensure 'man' directory exists.] *******************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [java : Ensure Java is installed.] ************************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [java : include_tasks] ************************************************************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [java : Set JAVA_HOME if configured.] *********************************************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [sonarqube : Create SonarQube system group] ***************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Create SonarQube system user] ****************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Create SonarQube directories] ****************************************************************************************************************************************************
+changed: [ubuntu-sonarqube] => (item=/opt/sonarqube)
+changed: [ubuntu-sonarqube] => (item=/var/log/sonarqube)
+changed: [ubuntu-sonarqube] => (item=/opt/sonarqube/sonarqube-7.3/data)
+changed: [ubuntu-sonarqube] => (item=/opt/sonarqube/sonarqube-7.3/temp)
+
+TASK [sonarqube : set max_map_count value (required by elasticsearch)] *****************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Ensure JAVA is installed] ********************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Fail if JAVA is not available] ***************************************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [sonarqube : Execute Debian specific tasks] ***************************************************************************************************************************************************
+included: /root/ansible/roles/sonarqube/tasks/setup_debian.yml for ubuntu-sonarqube
+
+TASK [sonarqube : Ensure required packages are installed] ******************************************************************************************************************************************
+ok: [ubuntu-sonarqube] => (item=procps)
+changed: [ubuntu-sonarqube] => (item=unzip)
+
+TASK [sonarqube : include_tasks] *******************************************************************************************************************************************************************
+included: /root/ansible/roles/sonarqube/tasks/setup_prepare.yml for ubuntu-sonarqube
+
+TASK [sonarqube : Overwrite SonarQube download url] ************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Overwrite SonarQube plugin base url] *********************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Overwrite SonarQube commercial plugin base url] **********************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : include_tasks] *******************************************************************************************************************************************************************
+included: /root/ansible/roles/sonarqube/tasks/setup_sonarqube.yml for ubuntu-sonarqube
+
+TASK [sonarqube : Check if SonarQube binary exists] ************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Download SonarQube binaries] *****************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Expand SonarQube binaries] *******************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Remove SonarQube archive] ********************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Collect the list of services to check if sonar.service exists] *******************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Stop service before upgrade] *****************************************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [sonarqube : Ensure SonarQube as init script for service management] **************************************************************************************************************************
+skipping: [ubuntu-sonarqube]
+
+TASK [sonarqube : Copy SonarQube systemd unit file into place (for systemd systems).] **************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Force systemd to reread configs] *************************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Ensure SonarQube is running and set to start on boot.] ***************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Ensure SonarQube files permissions] **********************************************************************************************************************************************
+ok: [ubuntu-sonarqube]
+
+TASK [sonarqube : Ensure SonarQube configuration] **************************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : install plugins] *****************************************************************************************************************************************************************
+
+RUNNING HANDLER [sonarqube : restart SonarQube service] ********************************************************************************************************************************************
+changed: [ubuntu-sonarqube]
+
+TASK [sonarqube : Ensure target version matches] ***************************************************************************************************************************************************
+FAILED - RETRYING: Ensure target version matches (60 retries left).
+FAILED - RETRYING: Ensure target version matches (59 retries left).
+FAILED - RETRYING: Ensure target version matches (58 retries left).
+FAILED - RETRYING: Ensure target version matches (57 retries left).
+FAILED - RETRYING: Ensure target version matches (56 retries left).
+FAILED - RETRYING: Ensure target version matches (55 retries left).
+FAILED - RETRYING: Ensure target version matches (54 retries left).
+ok: [ubuntu-sonarqube]
+
+PLAY RECAP *****************************************************************************************************************************************************************************************
+ubuntu-sonarqube           : ok=31   changed=13   unreachable=0    failed=0    skipped=9    rescued=0    ignored=0   
+
